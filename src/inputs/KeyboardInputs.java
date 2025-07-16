@@ -23,16 +23,16 @@ public class KeyboardInputs implements KeyListener {
 
         switch(e.getKeyCode()){
             case KeyEvent.VK_W :
-                gamePanel.changeYDelta(-4);
+                gamePanel.changeYDelta(-6);
                 break;
             case KeyEvent.VK_A :
-                gamePanel.changeXDelta(-4);
+                gamePanel.changeXDelta(-6);
                 break;
             case KeyEvent.VK_S :
-                gamePanel.changeYDelta(4);
+                gamePanel.changeYDelta(6);
                 break;
             case KeyEvent.VK_D :
-                gamePanel.changeXDelta(4);
+                gamePanel.changeXDelta(6);
                 break;
 
         }
