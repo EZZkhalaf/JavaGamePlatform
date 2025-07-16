@@ -74,31 +74,32 @@ public class GamePanel extends JPanel {
     }
 
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
+    public void updateGame(){
         animationUpdate();
         setAnimation();
         setPlayerPosition();
+        repaint();
+    }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
          g.drawImage(allAnimations[playerAction][animationIndex], (int)xDelta, (int)yDelta,128,80, null); // Example
-        // repaint(); // If needed for animation
     }
 
     private void setPlayerPosition() {
         if(moving){
             switch(playerDirection){
                 case LEFT :
-                    xDelta -=5;
+                    xDelta -=3;
                     break;
                 case UP :
-                    yDelta -=5;
+                    yDelta -=3;
                     break;
                 case RIGHT :
-                    xDelta+=5;
+                    xDelta+=3;
                     break;
                 case DOWN :
-                    yDelta +=5;
+                    yDelta +=3;
                     break;
 
             }
