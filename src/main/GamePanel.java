@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static utils.Constants.playerConstants.*;
+import static utils.Constants.DIRECTIONS.*;
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
@@ -17,9 +19,11 @@ public class GamePanel extends JPanel {
     private float xDir = 1f, yDir = 1f;
     private BufferedImage bufferImage ;
     private BufferedImage[][] allAnimations;
-    private int animationTick , animationIndex , animationSpeed = 20;
+    private int animationTick , animationIndex , animationSpeed = 13;
 
-
+    private int playerAction = IDEAL;
+    private int playerDirection = -1; //not moving
+    private boolean moving = false;
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
         importBufferImage();
@@ -31,6 +35,16 @@ public class GamePanel extends JPanel {
 
         setFocusable(true);
         requestFocusInWindow();
+    }
+
+
+    public void setDirection(int direction){
+        this.playerDirection = direction;
+        moving = true;
+    }
+
+    public void setMoving(boolean isMove){
+        this.moving = isMove;
     }
 
     private void loadAnimation() {
@@ -59,21 +73,44 @@ public class GamePanel extends JPanel {
         setMaximumSize(size);
     }
 
-    public void changeXDelta(int value) {
-        this.xDelta += value;
-    }
-
-    public void changeYDelta(int value) {
-        this.yDelta += value;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         animationUpdate();
-         g.drawImage(allAnimations[1][animationIndex], (int)xDelta, (int)yDelta,128,80, null); // Example
+        setAnimation();
+        setPlayerPosition();
+         g.drawImage(allAnimations[playerAction][animationIndex], (int)xDelta, (int)yDelta,128,80, null); // Example
         // repaint(); // If needed for animation
+    }
+
+    private void setPlayerPosition() {
+        if(moving){
+            switch(playerDirection){
+                case LEFT :
+                    xDelta -=5;
+                    break;
+                case UP :
+                    yDelta -=5;
+                    break;
+                case RIGHT :
+                    xDelta+=5;
+                    break;
+                case DOWN :
+                    yDelta +=5;
+                    break;
+
+            }
+        }
+    }
+
+    private void setAnimation() {
+        if(moving){
+            playerAction = RUN;
+        }else{
+            playerAction = IDEAL;
+        }
     }
 
     private void animationUpdate() {
@@ -81,7 +118,7 @@ public class GamePanel extends JPanel {
         if(animationTick >= animationSpeed){
             animationTick =0;
             animationIndex ++ ;
-            if(animationIndex >= allAnimations.length){
+            if(animationIndex >= getImagesAmount(playerAction)){
                 animationIndex = 0;
             }
         }
