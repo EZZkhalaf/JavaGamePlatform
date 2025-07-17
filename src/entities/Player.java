@@ -1,6 +1,7 @@
 package entities;
 
 import main.GamePanel;
+import utils.LoadSave;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
+import utils.LoadSave.*;
 import static utils.Constants.playerConstants.*;
 
 public class Player extends Entity{
@@ -31,27 +32,21 @@ public class Player extends Entity{
         setPlayerPosition();
         animationUpdate();
         setAnimation();
-//        repaint();
     }
     public void render(Graphics g){
         g.drawImage(allAnimations[playerAction][animationIndex], (int)x, (int)y,128,80, null); // Example
+//        g.drawImage(allAnimations[playerAction][animationIndex], (int)x, (int)y,128,80, null); // Example
 
     }
 
 
     private void loadAnimation() {
-
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
-        try{
-            BufferedImage img = ImageIO.read(is);
+            BufferedImage img = LoadSave.getFrameAtlas(LoadSave.PLAYER_IMAGE);
             allAnimations = new BufferedImage[9][6];
             for(int j =0 ; j< allAnimations.length; j++)
                 for (int i =0 ; i < allAnimations[j].length ; i++){
                     allAnimations[j][i] = img.getSubimage(i*64 , j*40 , 64,40);
                 }
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     public boolean isUp() {

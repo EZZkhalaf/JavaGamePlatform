@@ -5,6 +5,8 @@ import inputs.MouseInputs;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import static main.Game.GAME_WIDTH;
+import static main.Game.GAME_HEIGHT;
 
 public class GamePanel extends JPanel {
 
@@ -27,7 +29,7 @@ public class GamePanel extends JPanel {
 
 
     public void setPanelSize() {
-        Dimension size = new Dimension(1280, 800);
+        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);

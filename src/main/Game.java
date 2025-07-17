@@ -1,6 +1,8 @@
 package main;
 
 import entities.Player;
+import jdk.dynalink.support.SimpleRelinkableCallSite;
+import levels.LevelHandler;
 
 import java.awt.*;
 
@@ -14,6 +16,16 @@ public class Game implements Runnable{
     private long lastCheck = 0;
     private Player player;
 
+
+    public final static int TILES_DEFAULT_SIZE = 32;
+    public final static float SCALE = 1.0f;
+    public final static int TILES_WIDTH = 26;
+    public final static int TILES_HEIGHT = 14;
+    public final static int TILES_SIZE = (int)(TILES_DEFAULT_SIZE * SCALE);
+    public final static int GAME_WIDTH = TILES_DEFAULT_SIZE * TILES_WIDTH;
+    public final static int GAME_HEIGHT = (int)(TILES_DEFAULT_SIZE * TILES_HEIGHT);
+    public LevelHandler levelHandler;
+
     public Game(){
         initializeClasses();
         gamePanel = new GamePanel(this);
@@ -24,6 +36,7 @@ public class Game implements Runnable{
 
     private void initializeClasses() {
         player = new Player(200,200);
+        levelHandler = new LevelHandler(this);
     }
 
 
@@ -35,8 +48,10 @@ public class Game implements Runnable{
     public void update(){
         player.update();
         gamePanel.repaint();
+        levelHandler.update();
     }
     public void render(Graphics g){
+        levelHandler.draw(g);
         player.render(g);
     }
 
