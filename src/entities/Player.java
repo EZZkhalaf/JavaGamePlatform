@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import utils.LoadSave.*;
 import static utils.Constants.playerConstants.*;
-
+import static utils.HelperMethods.CanMoveHere;
 public class Player extends Entity{
 
     private BufferedImage[][] allAnimations;
@@ -19,24 +19,23 @@ public class Player extends Entity{
     private int playerAction = IDEAL;
     private int playerDirection = -1; //not moving
     private boolean moving = false , attacking = false;
-    private float x,y;
     private boolean left , right , up , down ;
     private float playerSpeed = 2.0f;
-
-    public Player(float x , float y){
-        super(x,y);
+    private int[][] levelData;
+    public Player(float x , float y , int width , int height){
+        super(x,y,width,height);
 
         loadAnimation();
     }
     public void update(){
         setPlayerPosition();
+        updateHitBox();
         animationUpdate();
         setAnimation();
     }
     public void render(Graphics g){
-        g.drawImage(allAnimations[playerAction][animationIndex], (int)x, (int)y,128,80, null); // Example
-//        g.drawImage(allAnimations[playerAction][animationIndex], (int)x, (int)y,128,80, null); // Example
-
+        g.drawImage(allAnimations[playerAction][animationIndex], (int)x - 30, (int) y - 30,128,80, null); // Example
+        drawHitBox(g);
     }
 
 
@@ -49,6 +48,9 @@ public class Player extends Entity{
                 }
     }
 
+    public void loadLevelData(int[][] levelData){
+        this.levelData = levelData;
+    }
     public boolean isUp() {
         return up;
     }
@@ -94,21 +96,31 @@ public class Player extends Entity{
 
     private void setPlayerPosition() {
         moving = false;
-        if(right && !left){
-            x += playerSpeed;
-            moving = true;
-        }else if(left && !right ){
-            x -= playerSpeed;
+
+        if(!left && !right && !up && !down)
+            return ;
+
+        float xSpeed = 0 , ySpeed = 0;
+
+        if(right && !left)
+            xSpeed = playerSpeed;
+
+        else if(left && !right )
+            xSpeed = -playerSpeed;
+
+
+        if(up && !down )
+            ySpeed = -playerSpeed;
+
+        else if(down && !up)
+            ySpeed = playerSpeed;
+
+        if(CanMoveHere(x + xSpeed , y + ySpeed , width , height , levelData)){
+            this.x += xSpeed;
+            this.y += ySpeed;
             moving = true;
         }
 
-        if(up && !down ){
-            y -= playerSpeed;
-            moving = true;
-        }else if(down && !up){
-            y += playerSpeed;
-            moving = true;
-        }
     }
 
     private void setAnimation() {
